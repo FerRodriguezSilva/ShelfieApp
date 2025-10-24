@@ -18,6 +18,9 @@ class LoginViewModel(
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
+    init{
+        println("LoginViewModel Inicializado")
+    }
 
     fun onEmailChange(email: String) {
         _state.update { it.copy(email = email, error = null) }
@@ -28,6 +31,7 @@ class LoginViewModel(
     }
 
     fun login() {
+        println("🔥 Login iniciado: ${_state.value.email}")
         // Validar credenciales primero
         if (!validateCredentialsUseCase(_state.value.email, _state.value.password)) {
             _state.update {
@@ -39,6 +43,7 @@ class LoginViewModel(
         }
 
         _state.update { it.copy(isLoading = true, error = null) }
+        println("✅ Validación exitosa, haciendo login...")
 
         viewModelScope.launch {
             val result = loginUseCase(
@@ -50,6 +55,7 @@ class LoginViewModel(
 
             result.fold(
                 onSuccess = { user ->
+                    println("🎉 Login exitoso: $user")
                     _state.update {
                         it.copy(
                             isLoading = false,
@@ -58,6 +64,7 @@ class LoginViewModel(
                     }
                 },
                 onFailure = { error ->
+                    println("❌ Login falló: ${error.message}")
                     _state.update {
                         it.copy(
                             isLoading = false,

@@ -11,7 +11,7 @@ import com.example.shelfieapp.ui.theme.ShelfieAppTheme
 
 @Composable
 fun App() {
-    ShelfieAppTheme {
+    ShelfieAppTheme { // ← Esto aplica tu tema
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
