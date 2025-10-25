@@ -72,6 +72,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
 
+
     /* Local bundle room
     implementation(libs.bundles.local)  // Probablemente incluye Room, etc.
     annotationProcessor(libs.room.compiler)
