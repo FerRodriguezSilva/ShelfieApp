@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.ksp)
+
+    //id("com.android.application")
+    //id("com.google.gms.google-services")
 }
 
 android {
@@ -37,13 +43,14 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
+    /* composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
-    }
+    } */
 }
 
 dependencies {
 
+    //implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -71,6 +78,25 @@ dependencies {
     implementation(libs.coil.network)
 
     implementation(libs.androidx.navigation.compose)
+
+
+    // 🔥 FIREBASE
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.storage)
+
+    // 💾 ROOM
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // 📦 DATASTORE
+    implementation(libs.datastore)
+
+    // 🛠️ WORK MANAGER
+    implementation(libs.androidx.work.runtime.ktx)
 
 
     /* Local bundle room

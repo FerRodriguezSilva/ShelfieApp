@@ -21,6 +21,21 @@ coilCompose = "3.3.0"
 
 navcompose = "2.9.5"
 
+# 🔥 FIREBASE (AGREGAR)
+google-services = "4.4.3"
+firebase-bom = "34.0.0"
+
+# 💾 ROOM (AGREGAR)
+room = "2.8.0"
+ksp = "2.0.20-1.0.24"
+
+# 📦 DATASTORE (AGREGAR)
+datastore = "1.0.0"
+
+# 🛠️ WORK MANAGER (AGREGAR - para notificaciones periódicas)
+work = "2.11.0"
+
+
 
 
 [libraries]
@@ -51,6 +66,26 @@ coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = 
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navcompose"}
 
+# 🔥 FIREBASE (AGREGAR)
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
+
+# 💾 ROOM (AGREGAR)
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+# 📦 DATASTORE (AGREGAR)
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+# 🛠️ WORK MANAGER (AGREGAR)
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+
+
+
 
 
 [plugins]
@@ -58,5 +93,8 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
+# 🔥 FIREBASE
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
-
+# 💾 KSP
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
