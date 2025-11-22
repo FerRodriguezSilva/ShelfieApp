@@ -88,9 +88,9 @@ dependencies {
     implementation(libs.firebase.storage)
 
     // 💾 ROOM
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+     implementation(libs.room.runtime)
+     implementation(libs.room.ktx)
+     ksp(libs.room.compiler)
 
     // 📦 DATASTORE
     implementation(libs.datastore)

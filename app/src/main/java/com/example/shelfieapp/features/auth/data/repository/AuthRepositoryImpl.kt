@@ -43,7 +43,7 @@ class AuthRepositoryImpl(
         }
     }
 
-    suspend fun register(email: String, password: String, nombre: String): Result<User> {
+    override suspend fun register(email: String, password: String, nombre: String): Result<User> {
         return try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(
                 email,
@@ -84,7 +84,7 @@ class AuthRepositoryImpl(
         return firebaseAuth.currentUser != null
     }
 
-    suspend fun logout() {
+    override suspend fun logout() {
         firebaseAuth.signOut()
     }
 }

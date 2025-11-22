@@ -5,6 +5,7 @@ import com.example.shelfieapp.features.auth.domain.model.User
 
 interface AuthRepository {
     suspend fun login(loginRequest: LoginRequest): Result<User>
+    suspend fun register(email: String, password: String, nombre: String): Result<User>
     suspend fun isLoggedIn(): Boolean
-    fun register(email: String, password: String, nombre: String): Result<User>
+    suspend fun logout()
 }
