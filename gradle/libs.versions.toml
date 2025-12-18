@@ -20,6 +20,11 @@ koinAndroidxNavigation = "4.1.1"
 coilCompose = "3.3.0"
 
 navcompose = "2.9.5"
+googleGmsGoogleServices = "4.4.4"
+firebaseDatabase = "22.0.1"
+
+ksp = "2.2.20-2.0.4"
+room = "2.8.0"
 
 
 
@@ -50,13 +55,26 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCo
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navcompose"}
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
-
+#room
+room-runtime = { group="androidx.room", name="room-runtime", version.ref="room"}
+room-compiler = { group="androidx.room", name="room-compiler", version.ref="room"}
+room-ktx = { group="androidx.room", name="room-ktx", version.ref="room"}
+room-rxjava2 = { group="androidx.room", name="room-rxjava2", version.ref="room"}
+room-rxjava3 = { group="androidx.room", name="room-rxjava3", version.ref="room"}
+room-guava = { group="androidx.room", name="room-guava", version.ref="room"}
+room-testing = { group="androidx.room", name="room-testing", version.ref="room"}
+room-paging = { group="androidx.room", name="room-paging", version.ref="room"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+ksp = { id = "com.google.devtools.ksp", version.ref="ksp"}
 
+[bundles]
+local = ["room-runtime", "room-ktx", "room-rxjava2", "room-rxjava3", "room-guava", "room-paging" ]
 
 
