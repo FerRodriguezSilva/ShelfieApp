@@ -1,3 +1,5 @@
+// package com.example.shelfieapp.di
+
 package com.example.shelfieapp.di
 
 import androidx.room.Room
@@ -8,6 +10,7 @@ import com.example.shelfieapp.features.auth.domain.usecase.LoginUseCase
 import com.example.shelfieapp.features.auth.domain.usecase.RegisterUseCase
 import com.example.shelfieapp.features.auth.domain.usecase.ValidateCredentialsUseCase
 import com.example.shelfieapp.features.auth.presentation.LoginViewModel
+import com.example.shelfieapp.features.auth.presentation.RegisterViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -35,4 +38,5 @@ val appModule = module {
 
     // ViewModels
     viewModel { LoginViewModel(get(), get()) }
+    viewModel { RegisterViewModel(get()) }
 }

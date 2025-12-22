@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.shelfieapp.features.auth.presentation.LoginScreen
+import com.example.shelfieapp.features.auth.presentation.RegisterScreen
 import com.example.shelfieapp.features.home.presentation.HomeScreen
 
 @Composable
@@ -21,6 +22,23 @@ fun NavGraph() {
                 onLoginSuccess = {
                     navController.navigate(Destinations.Home.route) {
                         popUpTo(Destinations.Login.route) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate(Destinations.Register.route)
+                }
+            )
+        }
+        composable(Destinations.Register.route) {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.navigate(Destinations.Home.route) {
+                        popUpTo(Destinations.Login.route) { inclusive = true }
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Destinations.Login.route) {
+                        popUpTo(Destinations.Register.route)
                     }
                 }
             )
