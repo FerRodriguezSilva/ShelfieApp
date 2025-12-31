@@ -4,6 +4,7 @@ package com.example.shelfieapp.di
 
 import androidx.room.Room
 import com.example.shelfieapp.features.auth.data.local.database.AppDatabase
+import com.example.shelfieapp.features.auth.data.remote.FirebaseRealtimeDataSource
 import com.example.shelfieapp.features.auth.data.repository.AuthRepositoryImpl
 import com.example.shelfieapp.features.auth.domain.repository.AuthRepository
 import com.example.shelfieapp.features.auth.domain.usecase.LoginUseCase
@@ -16,7 +17,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    // Database
+    // Database Room
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -28,8 +29,16 @@ val appModule = module {
     // DAOs
     single { get<AppDatabase>().userDao() }
 
+    // Firebase Realtime Database (sin Auth)
+    single { FirebaseRealtimeDataSource() }
+
     // Repository
-    single<AuthRepository> { AuthRepositoryImpl(get()) }
+    single<AuthRepository> {
+        AuthRepositoryImpl(
+            userDao = get(),
+            firebaseDataSource = get()
+        )
+    }
 
     // Use Cases
     factory { LoginUseCase(get()) }
