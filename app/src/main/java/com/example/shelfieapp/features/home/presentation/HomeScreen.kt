@@ -99,7 +99,9 @@ fun HomeScreen(
 
                 // Acciones rápidas
                 QuickActions(
-                    onAddIngredient = { /* TODO */ }
+                    onAddIngredient = {
+                        onNavigate("pantry")
+                    }
                 )
 
                 // Recomendaciones destacadas

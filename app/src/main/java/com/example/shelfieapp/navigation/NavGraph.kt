@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.shelfieapp.features.auth.presentation.LoginScreen
 import com.example.shelfieapp.features.auth.presentation.RegisterScreen
 import com.example.shelfieapp.features.home.presentation.HomeScreen
+import com.example.shelfieapp.features.pantry.presentation.screens.PantryScreen
 
 @Composable
 fun NavGraph() {
@@ -75,6 +76,11 @@ fun NavGraph() {
         composable(Destinations.Settings.route) {
             // SettingsScreen() - Para implementar después
             Text("Settings Screen - En construcción")
+        }
+        composable(Destinations.Pantry.route) {
+            PantryScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
