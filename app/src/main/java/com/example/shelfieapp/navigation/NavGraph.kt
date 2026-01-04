@@ -9,6 +9,7 @@ import com.example.shelfieapp.features.auth.presentation.LoginScreen
 import com.example.shelfieapp.features.auth.presentation.RegisterScreen
 import com.example.shelfieapp.features.home.presentation.HomeScreen
 import com.example.shelfieapp.features.pantry.presentation.screens.PantryScreen
+import com.example.shelfieapp.features.recipes.presentation.screens.RecipesScreen
 
 @Composable
 fun NavGraph() {
@@ -64,8 +65,12 @@ fun NavGraph() {
         }
 
         composable(Destinations.Recipes.route) {
-            // RecipesScreen() - Para implementar después
-            Text("Recipes Screen - En construcción")
+            RecipesScreen(
+                onBack = { navController.popBackStack() },
+                onRecipeClick = { recipeId ->
+                    // TODO: Navegar a pantalla de detalle de receta
+                }
+            )
         }
 
         composable(Destinations.Shopping.route) {

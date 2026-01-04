@@ -21,6 +21,16 @@ import com.example.shelfieapp.features.pantry.domain.usecase.DeletePantryItemUse
 import com.example.shelfieapp.features.pantry.domain.usecase.GetPantryItemsUseCase
 import com.example.shelfieapp.features.pantry.domain.usecase.UpdatePantryItemUseCase
 import com.example.shelfieapp.features.pantry.presentation.viewmodel.PantryViewModel
+import com.example.shelfieapp.features.recipes.data.local.database.RecipeDatabase
+import com.example.shelfieapp.features.recipes.data.remote.FirebaseRecipeDataSource
+import com.example.shelfieapp.features.recipes.data.repository.RecipeRepositoryImpl
+import com.example.shelfieapp.features.recipes.domain.repository.RecipeRepository
+import com.example.shelfieapp.features.recipes.domain.service.RecipeMatchingService
+import com.example.shelfieapp.features.recipes.domain.usecase.GetAllRecipesUseCase
+import com.example.shelfieapp.features.recipes.domain.usecase.GetAvailableRecipesUseCase
+import com.example.shelfieapp.features.recipes.domain.usecase.GetRecipeByIdUseCase
+import com.example.shelfieapp.features.recipes.domain.usecase.SearchRecipesUseCase
+import com.example.shelfieapp.features.recipes.presentation.viewmodel.RecipesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.factoryOf
@@ -77,6 +87,31 @@ val appModule = module {
             pantryRepository = get()
         )
     }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            RecipeDatabase::class.java,
+            RecipeDatabase.DATABASE_NAME
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    // DAO de recetas
+    single { get<RecipeDatabase>().recipeDao() }
+
+    // Firebase Data Sources
+    singleOf(::FirebaseRecipeDataSource)
+
+    // Repositories
+    single<RecipeRepository> {
+        RecipeRepositoryImpl(
+            recipeDao = get(),
+            firebaseDataSource = get()
+        )
+    }
+
+    // Services
+    single { RecipeMatchingService() }
     // Use Cases para Auth
     factoryOf(::LoginUseCase)
     factoryOf(::RegisterUseCase)
@@ -92,4 +127,13 @@ val appModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::RegisterViewModel)
     viewModelOf(::PantryViewModel)
+
+    // Use Cases para Recipes
+    factoryOf(::GetAllRecipesUseCase)
+    factoryOf(::GetAvailableRecipesUseCase)
+    factoryOf(::GetRecipeByIdUseCase)
+    factoryOf(::SearchRecipesUseCase)
+
+    // ViewModels
+    viewModelOf(::RecipesViewModel)
 }
