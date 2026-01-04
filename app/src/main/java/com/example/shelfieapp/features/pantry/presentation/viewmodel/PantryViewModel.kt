@@ -40,7 +40,7 @@ class PantryViewModel(
         }
     }
 
-    fun addItem(name: String, quantity: Double, unit: String, category: String?) {
+    fun addItem(name: String, quantity: Double, unit: String, expirationDate: Long) {
         viewModelScope.launch {
             val currentUser = authRepository.getLoggedInUser()
             if (currentUser != null) {
@@ -53,7 +53,7 @@ class PantryViewModel(
                     name = name,
                     quantity = quantity,
                     unit = unit,
-                    category = category
+                    expirationDate = expirationDate  // NUEVO
                 )
 
                 val result = addPantryItemUseCase(newItem)

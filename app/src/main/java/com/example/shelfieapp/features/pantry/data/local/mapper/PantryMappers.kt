@@ -1,3 +1,4 @@
+// Archivo: com/example/shelfieapp/features/pantry/data/local/mapper/PantryItemMapper.kt
 package com.example.shelfieapp.features.pantry.data.local.mapper
 
 import com.example.shelfieapp.features.pantry.data.local.entity.PantryItemEntity
@@ -11,10 +12,11 @@ fun PantryItemEntity.toDomainModel(): PantryItem {
         name = this.name,
         quantity = this.quantity,
         unit = this.unit,
-        category = this.category,
+        expirationDate = this.expirationDate,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
-        isActive = this.isActive
+        isActive = this.isActive,
+        notificationSent = this.notificationSent
     )
 }
 
@@ -26,10 +28,11 @@ fun PantryItem.toEntity(isSynced: Boolean = false): PantryItemEntity {
         name = this.name,
         quantity = this.quantity,
         unit = this.unit,
-        category = this.category,
+        expirationDate = this.expirationDate,
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
         isActive = this.isActive,
-        isSynced = isSynced
+        isSynced = isSynced,
+        notificationSent = this.notificationSent
     )
 }

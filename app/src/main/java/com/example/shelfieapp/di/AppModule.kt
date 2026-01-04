@@ -1,3 +1,4 @@
+// Archivo: com/example/shelfieapp/di/AppModule.kt
 package com.example.shelfieapp.di
 
 import androidx.room.Room
@@ -20,7 +21,9 @@ import com.example.shelfieapp.features.pantry.domain.usecase.GetPantryItemsUseCa
 import com.example.shelfieapp.features.pantry.domain.usecase.UpdatePantryItemUseCase
 import com.example.shelfieapp.features.pantry.presentation.viewmodel.PantryViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val appModule = module {
@@ -30,7 +33,8 @@ val appModule = module {
             androidContext(),
             AppDatabase::class.java,
             "shelfie_database"
-        ).build()
+        ).fallbackToDestructiveMigration() // Agrega esto para desarrollo
+            .build()
     }
 
     // Database Room para despensa
@@ -39,7 +43,8 @@ val appModule = module {
             androidContext(),
             PantryDatabase::class.java,
             PantryDatabase.DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigration() // Agrega esto para desarrollo
+            .build()
     }
 
     // DAOs
@@ -47,8 +52,8 @@ val appModule = module {
     single { get<PantryDatabase>().pantryDao() }
 
     // Firebase Data Sources
-    single { FirebaseRealtimeDataSource() }
-    single { FirebasePantryDataSource() }
+    singleOf(::FirebaseRealtimeDataSource)
+    singleOf(::FirebasePantryDataSource)
 
     // Repositories
     single<AuthRepository> {
@@ -62,31 +67,23 @@ val appModule = module {
         PantryRepositoryImpl(
             pantryDao = get(),
             firebaseDataSource = get(),
-            authRepository = get<AuthRepository>() // Usa la interfaz, no la implementación
+            authRepository = get()
         )
     }
 
     // Use Cases para Auth
-    factory { LoginUseCase(get()) }
-    factory { RegisterUseCase(get()) }
+    factoryOf(::LoginUseCase)
+    factoryOf(::RegisterUseCase)
     factory { ValidateCredentialsUseCase() }
 
     // Use Cases para Pantry
-    factory { AddPantryItemUseCase(get<PantryRepository>()) }
-    factory { GetPantryItemsUseCase(get<PantryRepository>()) }
-    factory { UpdatePantryItemUseCase(get<PantryRepository>()) }
-    factory { DeletePantryItemUseCase(get<PantryRepository>()) }
+    factoryOf(::AddPantryItemUseCase)
+    factoryOf(::GetPantryItemsUseCase)
+    factoryOf(::UpdatePantryItemUseCase)
+    factoryOf(::DeletePantryItemUseCase)
 
     // ViewModels
-    viewModel { LoginViewModel(get(), get()) }
-    viewModel { RegisterViewModel(get()) }
-    viewModel {
-        PantryViewModel(
-            addPantryItemUseCase = get(),
-            getPantryItemsUseCase = get(),
-            updatePantryItemUseCase = get(),
-            deletePantryItemUseCase = get(),
-            authRepository = get() // Aquí usa AuthRepository (interfaz)
-        )
-    }
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::RegisterViewModel)
+    viewModelOf(::PantryViewModel)
 }

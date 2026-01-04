@@ -1,3 +1,4 @@
+// Archivo: com/example/shelfieapp/features/pantry/data/local/entity/PantryItemEntity.kt
 package com.example.shelfieapp.features.pantry.data.local.entity
 
 import androidx.room.Entity
@@ -11,9 +12,10 @@ data class PantryItemEntity(
     val name: String,
     val quantity: Double,
     val unit: String,
-    val category: String?,
+    val expirationDate: Long, // NUEVO
     val createdAt: Long,
     val updatedAt: Long,
     val isActive: Boolean = true,
-    val isSynced: Boolean = false  // Para sincronización con Firebase
+    val isSynced: Boolean = false,
+    val notificationSent: Boolean = false // NUEVO
 )

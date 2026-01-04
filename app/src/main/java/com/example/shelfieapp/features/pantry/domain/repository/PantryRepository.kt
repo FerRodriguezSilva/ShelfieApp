@@ -1,3 +1,4 @@
+// Archivo: com/example/shelfieapp/features/pantry/domain/repository/PantryRepository.kt
 package com.example.shelfieapp.features.pantry.domain.repository
 
 import com.example.shelfieapp.features.pantry.domain.model.PantryItem
@@ -12,7 +13,7 @@ interface PantryRepository {
 
     // Consultas
     fun getPantryItems(userId: String): Flow<List<PantryItem>>
-    fun getPantryItemsByCategory(userId: String, category: String): Flow<List<PantryItem>>
+    fun getExpiringItems(userId: String, daysThreshold: Int): Flow<List<PantryItem>>
     suspend fun searchPantryItems(userId: String, query: String): List<PantryItem>
 
     // Estadísticas
@@ -21,6 +22,9 @@ interface PantryRepository {
 
     // Sincronización
     suspend fun syncUserPantry(userId: String): Result<Unit>
+
+    // Notificaciones
+    suspend fun markNotificationSent(itemId: String): Result<Unit>
 }
 
 data class PantryStats(

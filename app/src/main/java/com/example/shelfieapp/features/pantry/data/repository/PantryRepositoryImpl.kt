@@ -1,3 +1,4 @@
+// Archivo: com/example/shelfieapp/features/pantry/data/repository/PantryRepositoryImpl.kt
 package com.example.shelfieapp.features.pantry.data.repository
 
 import com.example.shelfieapp.features.auth.domain.repository.AuthRepository
@@ -10,7 +11,6 @@ import com.example.shelfieapp.features.pantry.domain.repository.PantryRepository
 import com.example.shelfieapp.features.pantry.domain.repository.PantryStats
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class PantryRepositoryImpl(
@@ -94,18 +94,20 @@ class PantryRepositoryImpl(
             .map { entities -> entities.map { it.toDomainModel() } }
     }
 
-    // Métodos simplificados (los demás puedes implementarlos después)
-    override fun getPantryItemsByCategory(userId: String, category: String): Flow<List<PantryItem>> {
+    override fun getExpiringItems(userId: String, daysThreshold: Int): Flow<List<PantryItem>> {
         return pantryDao.getItemsByUser(userId)
             .map { entities ->
                 entities.map { it.toDomainModel() }
-                    .filter { it.category == category }
+                    .filter { item ->
+                        val currentTime = System.currentTimeMillis()
+                        val thresholdTime = currentTime + (daysThreshold * 24 * 60 * 60 * 1000L)
+                        item.expirationDate in (currentTime + 1)..thresholdTime
+                    }
             }
     }
 
     override suspend fun searchPantryItems(userId: String, query: String): List<PantryItem> {
         return try {
-            // Usar first() en lugar de firstOrNull()
             pantryDao.getItemsByUser(userId).first()
                 .map { it.toDomainModel() }
                 .filter { it.name.contains(query, ignoreCase = true) }
@@ -116,13 +118,25 @@ class PantryRepositoryImpl(
 
     override suspend fun getPantryStats(userId: String): PantryStats {
         val totalItems = pantryDao.getItemCount(userId)
-        val categoryCount = pantryDao.getCategoryCount(userId)
-        val lowStockItems = pantryDao.getLowStockItems(userId, 1.0).size
+
+        // Calcular items vencidos y próximos a vencer
+        val items = try {
+            pantryDao.getItemsByUser(userId).first()
+                .map { it.toDomainModel() }
+        } catch (e: Exception) {
+            emptyList()
+        }
+
+        val currentTime = System.currentTimeMillis()
+        val weekLater = currentTime + (7 * 24 * 60 * 60 * 1000L)
+
+        val expiredItems = items.count { it.expirationDate < currentTime }
+        val expiringItems = items.count { it.expirationDate in (currentTime + 1)..weekLater }
 
         return PantryStats(
             totalItems = totalItems,
-            totalCategories = categoryCount,
-            lowStockItems = lowStockItems
+            totalCategories = 0, // Ya no usamos categorías
+            lowStockItems = expiredItems + expiringItems
         )
     }
 
@@ -142,10 +156,17 @@ class PantryRepositoryImpl(
                 }
             }
 
-            // Traer items de Firebase (versión simplificada)
-            // Esto es más complejo, puedes implementarlo después
             Result.success(Unit)
 
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun markNotificationSent(itemId: String): Result<Unit> {
+        return try {
+            pantryDao.markNotificationSent(itemId)
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

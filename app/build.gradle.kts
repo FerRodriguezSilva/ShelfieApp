@@ -79,4 +79,8 @@ dependencies {
     testImplementation(libs.room.testing)
 
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+// Date picker
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
 }

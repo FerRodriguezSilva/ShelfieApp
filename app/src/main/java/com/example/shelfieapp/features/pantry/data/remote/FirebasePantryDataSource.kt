@@ -1,3 +1,4 @@
+// Archivo: com/example/shelfieapp/features/pantry/data/remote/FirebasePantryDataSource.kt
 package com.example.shelfieapp.features.pantry.data.remote
 
 import com.google.firebase.database.DataSnapshot
@@ -23,16 +24,16 @@ class FirebasePantryDataSource {
         return try {
             val itemRef = getUserPantryRef(userId).child(item.id)
 
-            // Usar mutableMapOf en lugar de hashMapOf
             val itemData = mutableMapOf<String, Any?>()
             itemData["id"] = item.id
             itemData["name"] = item.name
             itemData["quantity"] = item.quantity
             itemData["unit"] = item.unit
-            itemData["category"] = item.category ?: ""
+            itemData["expirationDate"] = item.expirationDate
             itemData["createdAt"] = item.createdAt
             itemData["updatedAt"] = item.updatedAt
             itemData["isActive"] = item.isActive
+            itemData["notificationSent"] = item.notificationSent
 
             itemRef.setValue(itemData).await()
             Result.success(item)
@@ -44,13 +45,13 @@ class FirebasePantryDataSource {
 
     suspend fun updatePantryItem(userId: String, item: PantryItem): Result<PantryItem> {
         return try {
-            // Usar mutableMapOf
             val updates = mutableMapOf<String, Any?>()
             updates["name"] = item.name
             updates["quantity"] = item.quantity
             updates["unit"] = item.unit
-            updates["category"] = item.category ?: ""
+            updates["expirationDate"] = item.expirationDate
             updates["updatedAt"] = System.currentTimeMillis()
+            updates["notificationSent"] = item.notificationSent
 
             getUserPantryRef(userId).child(item.id).updateChildren(updates).await()
             val updatedItem = item.copy(updatedAt = System.currentTimeMillis())
@@ -118,10 +119,11 @@ class FirebasePantryDataSource {
                 name = child("name").getValue(String::class.java) ?: "",
                 quantity = child("quantity").getValue(Double::class.java) ?: 0.0,
                 unit = child("unit").getValue(String::class.java) ?: "",
-                category = child("category").getValue(String::class.java),
+                expirationDate = child("expirationDate").getValue(Long::class.java) ?: 0L,
                 createdAt = child("createdAt").getValue(Long::class.java) ?: 0,
                 updatedAt = child("updatedAt").getValue(Long::class.java) ?: 0,
-                isActive = child("isActive").getValue(Boolean::class.java) ?: true
+                isActive = child("isActive").getValue(Boolean::class.java) ?: true,
+                notificationSent = child("notificationSent").getValue(Boolean::class.java) ?: false
             )
         } catch (e: Exception) {
             null

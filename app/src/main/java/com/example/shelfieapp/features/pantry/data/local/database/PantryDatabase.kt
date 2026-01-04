@@ -7,7 +7,7 @@ import com.example.shelfieapp.features.pantry.data.local.entity.PantryItemEntity
 
 @Database(
     entities = [PantryItemEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class PantryDatabase : RoomDatabase() {
