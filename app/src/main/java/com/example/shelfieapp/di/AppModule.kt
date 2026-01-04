@@ -15,6 +15,7 @@ import com.example.shelfieapp.features.pantry.data.local.database.PantryDatabase
 import com.example.shelfieapp.features.pantry.data.remote.FirebasePantryDataSource
 import com.example.shelfieapp.features.pantry.data.repository.PantryRepositoryImpl
 import com.example.shelfieapp.features.pantry.domain.repository.PantryRepository
+import com.example.shelfieapp.features.pantry.domain.service.ExpirationNotificationService
 import com.example.shelfieapp.features.pantry.domain.usecase.AddPantryItemUseCase
 import com.example.shelfieapp.features.pantry.domain.usecase.DeletePantryItemUseCase
 import com.example.shelfieapp.features.pantry.domain.usecase.GetPantryItemsUseCase
@@ -70,7 +71,12 @@ val appModule = module {
             authRepository = get()
         )
     }
-
+    single {
+        ExpirationNotificationService(
+            context = androidContext(),
+            pantryRepository = get()
+        )
+    }
     // Use Cases para Auth
     factoryOf(::LoginUseCase)
     factoryOf(::RegisterUseCase)

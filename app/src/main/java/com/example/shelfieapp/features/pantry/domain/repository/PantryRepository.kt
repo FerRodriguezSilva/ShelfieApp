@@ -25,6 +25,7 @@ interface PantryRepository {
 
     // Notificaciones
     suspend fun markNotificationSent(itemId: String): Result<Unit>
+    suspend fun resetNotifications(userId: String): Result<Unit>
 }
 
 data class PantryStats(

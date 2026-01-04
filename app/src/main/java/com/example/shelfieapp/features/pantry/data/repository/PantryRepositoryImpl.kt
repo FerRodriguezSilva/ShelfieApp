@@ -171,4 +171,12 @@ class PantryRepositoryImpl(
             Result.failure(e)
         }
     }
+    override suspend fun resetNotifications(userId: String): Result<Unit> {
+        return try {
+            pantryDao.resetNotifications(userId)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
