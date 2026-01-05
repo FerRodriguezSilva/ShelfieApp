@@ -1,16 +1,10 @@
+// Archivo: com/example/shelfieapp/features/home/presentation/components/RecipeSuggestions.kt (actualizado)
 package com.example.shelfieapp.features.home.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +16,8 @@ fun RecipeSuggestions(
     recipes: List<String>,
     onViewAll: () -> Unit
 ) {
+    if (recipes.isEmpty()) return // No mostrar si no hay recetas
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,28 +33,37 @@ fun RecipeSuggestions(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(recipes) { recipe ->
-                    Card(
-                        modifier = Modifier.padding(4.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
-                        Text(
-                            text = recipe,
-                            modifier = Modifier.padding(12.dp),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+            if (recipes.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(recipes) { recipe ->
+                        Card(
+                            modifier = Modifier.padding(4.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        ) {
+                            Text(
+                                text = recipe,
+                                modifier = Modifier.padding(12.dp),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
-            }
 
-            TextButton(
-                onClick = onViewAll,
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text("Ver más recetas")
+                TextButton(
+                    onClick = onViewAll,
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Ver más recetas")
+                }
+            } else {
+                Text(
+                    text = "No hay recetas disponibles",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
         }
     }

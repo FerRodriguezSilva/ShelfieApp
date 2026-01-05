@@ -11,6 +11,7 @@ import com.example.shelfieapp.features.auth.domain.usecase.RegisterUseCase
 import com.example.shelfieapp.features.auth.domain.usecase.ValidateCredentialsUseCase
 import com.example.shelfieapp.features.auth.presentation.LoginViewModel
 import com.example.shelfieapp.features.auth.presentation.RegisterViewModel
+import com.example.shelfieapp.features.home.presentation.viewmodel.HomeViewModel
 import com.example.shelfieapp.features.pantry.data.local.database.PantryDatabase
 import com.example.shelfieapp.features.pantry.data.remote.FirebasePantryDataSource
 import com.example.shelfieapp.features.pantry.data.repository.PantryRepositoryImpl
@@ -30,6 +31,7 @@ import com.example.shelfieapp.features.recipes.domain.usecase.GetAllRecipesUseCa
 import com.example.shelfieapp.features.recipes.domain.usecase.GetAvailableRecipesUseCase
 import com.example.shelfieapp.features.recipes.domain.usecase.GetRecipeByIdUseCase
 import com.example.shelfieapp.features.recipes.domain.usecase.SearchRecipesUseCase
+import com.example.shelfieapp.features.recipes.domain.usecase.SyncRecipesUseCase
 import com.example.shelfieapp.features.recipes.presentation.viewmodel.RecipesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -133,7 +135,9 @@ val appModule = module {
     factoryOf(::GetAvailableRecipesUseCase)
     factoryOf(::GetRecipeByIdUseCase)
     factoryOf(::SearchRecipesUseCase)
+    factory { SyncRecipesUseCase(get()) }
 
     // ViewModels
     viewModelOf(::RecipesViewModel)
+    viewModelOf(::HomeViewModel)
 }

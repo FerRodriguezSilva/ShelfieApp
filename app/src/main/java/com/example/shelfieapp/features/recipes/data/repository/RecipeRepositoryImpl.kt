@@ -7,8 +7,10 @@ import com.example.shelfieapp.features.recipes.data.local.mapper.toEntity
 import com.example.shelfieapp.features.recipes.data.remote.FirebaseRecipeDataSource
 import com.example.shelfieapp.features.recipes.domain.model.Recipe
 import com.example.shelfieapp.features.recipes.domain.repository.RecipeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class RecipeRepositoryImpl(
     private val recipeDao: RecipeDao,
@@ -39,13 +41,23 @@ class RecipeRepositoryImpl(
 
     override suspend fun syncRecipes(): Result<Unit> {
         return try {
-            val remoteRecipes = firebaseDataSource.getAllRecipes().getOrDefault(emptyList())
+            withContext(Dispatchers.IO) {
+                // Obtener recetas de Firebase
+                val firebaseResult = firebaseDataSource.getAllRecipes()
 
-            remoteRecipes.forEach { recipe ->
-                recipeDao.insertRecipe(recipe.toEntity())
+                if (firebaseResult.isSuccess) {
+                    val remoteRecipes = firebaseResult.getOrDefault(emptyList())
+
+                    // Guardar en Room
+                    remoteRecipes.forEach { recipe ->
+                        recipeDao.insertRecipe(recipe.toEntity())
+                    }
+
+                    Result.success(Unit)
+                } else {
+                    Result.failure(firebaseResult.exceptionOrNull() ?: Exception("Error desconocido"))
+                }
             }
-
-            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }

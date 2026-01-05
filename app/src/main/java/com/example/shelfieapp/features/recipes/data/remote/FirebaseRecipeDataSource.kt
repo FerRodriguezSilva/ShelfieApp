@@ -107,9 +107,9 @@ class FirebaseRecipeDataSource {
                 instructions = child("instructions").getValue(String::class.java) ?: "",
                 preparationTime = child("preparationTime").getValue(Int::class.java) ?: 0,
                 ingredients = parseIngredients(child("ingredients")),
-                isFavorite = child("isFavorite").getValue(Boolean::class.java) ?: false,
-                createdAt = child("createdAt").getValue(Long::class.java) ?: 0,
-                updatedAt = child("updatedAt").getValue(Long::class.java) ?: 0
+                isFavorite = false,  // ← CAMBIO 1: Poner false por defecto
+                createdAt = System.currentTimeMillis(),  // ← CAMBIO 2: Usar tiempo actual
+                updatedAt = System.currentTimeMillis()   // ← CAMBIO 3: Usar tiempo actual
             )
         } catch (e: Exception) {
             null
@@ -125,7 +125,7 @@ class FirebaseRecipeDataSource {
                     name = child.child("name").getValue(String::class.java) ?: "",
                     quantity = child.child("quantity").getValue(Double::class.java) ?: 0.0,
                     unit = child.child("unit").getValue(String::class.java) ?: "",
-                    isOptional = child.child("isOptional").getValue(Boolean::class.java) ?: false
+                    isOptional = child.child("optional").getValue(Boolean::class.java) ?: false  // ← CAMBIO: "optional" no "isOptional"
                 )
                 ingredients.add(ingredient)
             } catch (e: Exception) {

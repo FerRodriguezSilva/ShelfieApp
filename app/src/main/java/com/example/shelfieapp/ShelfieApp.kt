@@ -6,10 +6,16 @@ import android.util.Log
 import androidx.work.*
 import com.example.shelfieapp.di.appModule
 import com.example.shelfieapp.features.pantry.worker.ExpirationCheckWorker
+import com.example.shelfieapp.features.recipes.domain.usecase.SyncRecipesUseCase
 import com.google.firebase.BuildConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
+
 
 class ShelfieApp : Application() {
     override fun onCreate() {
@@ -22,6 +28,7 @@ class ShelfieApp : Application() {
 
         // Configurar WorkManager para notificaciones periódicas
         setupExpirationNotifications()
+        syncRecipesOnStartup()
     }
 
     private fun setupExpirationNotifications() {
@@ -73,5 +80,19 @@ class ShelfieApp : Application() {
 
         WorkManager.getInstance(this).enqueue(oneTimeRequest)
         Log.d("ShelfieApp", "🔔 Verificación forzada de notificaciones")
+    }
+    private fun syncRecipesOnStartup() {
+        val scope = CoroutineScope(Dispatchers.IO)
+        scope.launch {
+            try {
+                // Obtener el use case manualmente para sincronizar
+                val koin = GlobalContext.get()
+                val syncUseCase = koin.get<SyncRecipesUseCase>()
+                syncUseCase()
+                Log.d("ShelfieApp", "✅ Recetas sincronizadas al iniciar")
+            } catch (e: Exception) {
+                Log.e("ShelfieApp", "❌ Error sincronizando recetas: ${e.message}")
+            }
+        }
     }
 }
